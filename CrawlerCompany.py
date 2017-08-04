@@ -80,7 +80,10 @@ class CrawlCompany():
 
                 if not text:
                     print each + " : the text is empty"
-                    time.sleep(10)
+                    if each == "REF_PLAINTIFF" or each == "FIC_PLAINTIFF":
+                        sys.exit(1)
+                    else:
+                        time.sleep(10)
 
                 case_info.update({each: text.encode("utf-8")})
 
@@ -109,20 +112,19 @@ class CrawlCompany():
 
         existed_data = []
         if os.path.isfile("crawling_data.csv"):
-            with open("crawling_data.csv", "r") as csvfile:
+            with open("crawling_data.csv", "rb") as csvfile:
                 reader = csv.DictReader(csvfile)
                 existed_data = [row for row in reader]
 
         column_names = [] + config.summary_name_list + config.company_name_list + \
-                       config.fic_name_list + config.ref_name_list
-        for each in config.plaintiff_name_list.values():
-            column_names += each
+            config.fic_name_list + config.plaintiff_name_list["fic"] + config.document_list["fic"] + \
+            config.ref_name_list + config.plaintiff_name_list["ref"] + config.document_list["ref"] + \
+            config.document_list["other"] + config.document_list["state"] + config.document_list["appeal"] + \
+            config.document_list["supreme"]
 
-        for each in config.document_list.values():
-            column_names += each
 
         existed_data += cls.one_page_data
-        with open("crawling_data.csv", "w") as csvfile:
+        with open("crawling_data.csv", "wb") as csvfile:
             writer = csv.DictWriter(csvfile, restval="", fieldnames=column_names)
             writer.writeheader()
             writer.writerows(existed_data)

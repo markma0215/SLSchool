@@ -1,6 +1,5 @@
 
 sequence = 0
-list_page = "http://securities.stanford.edu/filings.html?page="
 home_page = "http://securities.stanford.edu/filings.html?sort=cld_fic_filing_dt"
 base = "http://securities.stanford.edu/"
 
@@ -19,6 +18,7 @@ STATE_STC_DOCUMENT_COUNTER = 0
 
 SC_DOCUMENT_COUNTER = 0
 
+start_page = 2
 
 # key is the column name
 # value is process conditions: [0: html page only has unique this kind of elemnet or multiple get the first one, 1: has many elemnets and get index one;

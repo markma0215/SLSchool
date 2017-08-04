@@ -55,6 +55,7 @@ def crawlCompanyInfo(url):
     html_page = getHTMLPage(url)
     config.sequence += 1
     CrawlCompany.Crawl(html_page)
+    time.sleep(3)
 
 def crawller(url):
     company_links = getEachCompanyLink(url)
@@ -64,18 +65,23 @@ def crawller(url):
         return
 
     for i in range(len(company_links)):
-            crawlCompanyInfo(company_links[i])
+        crawlCompanyInfo(company_links[i])
 
 
 def main():
-    crawller(config.home_page)
-    for page_num in range(2, 232):
+    if config.start_page == 2:
+        crawller(config.home_page)
         print "writing file...."
         CrawlCompany.write_file()
         print "done"
-        one_list_page = config.list_page + str(page_num)
+
+    for page_num in range(config.start_page, 232):
+        one_list_page = config.home_page + "&page=" + str(page_num)
         print "crawling list page %s" % page_num
         crawller(one_list_page)
+        print "writing file...."
+        CrawlCompany.write_file()
+        print "done"
 
 
 if __name__ == "__main__":

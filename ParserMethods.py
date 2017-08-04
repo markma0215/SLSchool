@@ -31,6 +31,12 @@ def h4_substring(node):
         return (node.h4.string.split("et al.")[0] + "et al.")
     elif "Securities Litigation" in node.h4.string:
         return node.h4.string.replace("Securities Litigation", "")
+    elif "Litigation" in node.h4.string:
+        return node.h4.string.replace("Litigation", "")
+    elif "v." in node.h4.string:
+        return node.h4.string.split("v.")[0]
+    elif "vs." in node.h4.string:
+        return node.h4.string.split("vs.")[0]
     else:
         return ""
 
@@ -49,17 +55,17 @@ def get_plaintiff_name(node, section_name):
     for i in range(len(lists)):
         prefix = section_name.upper() + "_PLAINTIFF_" + str(i + 1)
         if lists[i].contents[0].string:
-            plaintiff_dict.update({prefix : lists[i].contents[0].string.encode("utf-8")})
+            plaintiff_dict.update({prefix : lists[i].contents[0].string.encode("utf-8").strip("\n").strip()})
         else:
             plaintiff_dict.update({prefix: ""})
 
         if lists[i].contents[2].string:
-            plaintiff_dict.update({(prefix + "_AD") : lists[i].contents[2].string.encode("utf-8")})
+            plaintiff_dict.update({(prefix + "_AD") : lists[i].contents[2].string.encode("utf-8").strip("\n").strip()})
         else:
             plaintiff_dict.update({(prefix + "_AD") : ""})
 
         if lists[i].contents[4].string:
-            plaintiff_dict.update({(prefix + "_PHONE") : lists[i].contents[4].string.strip('"').strip().encode("utf-8")})
+            plaintiff_dict.update({(prefix + "_PHONE") : lists[i].contents[4].string.strip('"').encode("utf-8").strip("\n").strip()})
         else:
             plaintiff_dict.update({(prefix + "_PHONE") : ""})
 
@@ -86,12 +92,12 @@ def get_documents_list(node, section_name):
         prefix = section_name.upper() + "_DOCUMENT_" + str(i + 1)
 
         if lists[i].contents[1].string:
-            document_dict.update({prefix : lists[i].contents[3].string.strip().encode("utf-8")})
+            document_dict.update({prefix : lists[i].contents[3].string.encode("utf-8").strip("\n").strip()})
         else:
             document_dict.update({prefix : ""})
 
         if lists[i].contents[2].string:
-            document_dict.update({prefix + "_DATE" : lists[i].contents[5].string.strip().encode("utf-8")})
+            document_dict.update({prefix + "_DATE" : lists[i].contents[5].string.encode("utf-8").strip("\n").strip()})
         else:
             document_dict.update({prefix + "_DATE" : ""})
 
