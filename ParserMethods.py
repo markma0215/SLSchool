@@ -52,6 +52,7 @@ def get_plaintiff_name(node, section_name):
 
     plaintiff_dict = {}
 
+
     for i in range(len(lists)):
         prefix = section_name.upper() + "_PLAINTIFF_" + str(i + 1)
         if lists[i].contents[0].string:
@@ -91,12 +92,12 @@ def get_documents_list(node, section_name):
     for i in range(len(lists)):
         prefix = section_name.upper() + "_DOCUMENT_" + str(i + 1)
 
-        if lists[i].contents[1].string:
+        if lists[i].contents[3].string:
             document_dict.update({prefix : lists[i].contents[3].string.encode("utf-8").strip("\n").strip()})
         else:
             document_dict.update({prefix : ""})
 
-        if lists[i].contents[2].string:
+        if lists[i].contents[5].string:
             document_dict.update({prefix + "_DATE" : lists[i].contents[5].string.encode("utf-8").strip("\n").strip()})
         else:
             document_dict.update({prefix + "_DATE" : ""})

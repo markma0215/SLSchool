@@ -19,10 +19,10 @@ class CrawlCompany():
         if not html_page:
             print "html page is empty, skip this company"
             return
+        config.init()
         cls.data = {"sequence": config.sequence}
         cls.crawl(html_page)
         cls.one_page_data.append(copy.deepcopy(cls.data))
-
 
 
     @classmethod
@@ -31,21 +31,37 @@ class CrawlCompany():
         soup = BeautifulSoup(html_page, "lxml")
         sections = soup.find_all("section")
         for each in sections:
-            if each["id"] == "fic" or each["id"] == "summary" or each["id"] == "company" or each["id"] == "ref":
-                cls.crawlSection(each)
+            try:
+                if each["id"] == "fic" or each["id"] == "summary" or each["id"] == "company" or each["id"] == "ref":
+                    cls.crawlSection(each)
 
-            if each["id"] == "fic" or each["id"] == "ref":
+                if each["id"] == "fic" or each["id"] == "ref":
 
-                cls.data.update(mapping["get_plaintiff_name"](each, each["id"]))
+                    cls.data.update(mapping["get_plaintiff_name"](each, each["id"]))
 
-            if each["id"] in config.table_names:
-                table = each.find("table", class_ = "table table-bordered table-striped table-hover")
-                if not table:
-                    print "no table in this section: %s" % each["id"]
-                    sys.exit(1)
+                if each["id"] in config.table_names:
+                    table = each.find("table", class_ = "table table-bordered table-striped table-hover")
+                    if not table:
+                        print "no table in this section: %s" % each["id"]
+                        sys.exit(1)
 
-                cls.data.update(mapping["get_documents_list"](table, each["id"]))
+                    cls.data.update(mapping["get_documents_list"](table, each["id"]))
+            except:
+                sys.exc_type, sys.exc_value, sys.exc_traceback = sys.exc_info()
+                traceback.print_exception(sys.exc_type, sys.exc_value, sys.exc_traceback)
 
+                time.sleep(1)
+                print each + " raised a problem"
+                print "Exit the program, please check this page html format"
+                print "FIC_PLAINTIFF_COUNTER is %s" % config.FIC_PLAINTIFF_COUNTER
+                print "FIC_DOCUMENT_COUNTER is %s" % config.FIC_DOCUMENT_COUNTER
+                print "REF_PLAINTIFF_COUNTER is %s" % config.REF_PLAINTIFF_COUNTER
+                print "REF_DOCUMENT_COUNTER is %s" % config.REF_DOCUMENT_COUNTER
+                print "OTH_DOCUMENT_COUNTER is %s" % config.OTH_DOCUMENT_COUNTER
+                print "COA_DOCUMENT_COUNTER is %s" % config.COA_DOCUMENT_COUNTER
+                print "STATE_STC_DOCUMENT_COUNTER us %s" % config.STATE_STC_DOCUMENT_COUNTER
+                print "SC_DOCUMENT_COUNTER is %s" % config.SC_DOCUMENT_COUNTER
+                sys.exit(1)
 
     @classmethod
     def crawlSection(cls, section):

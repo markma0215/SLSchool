@@ -1,24 +1,24 @@
 
-sequence = 0
+sequence = 480
 home_page = "http://securities.stanford.edu/filings.html?sort=cld_fic_filing_dt"
 base = "http://securities.stanford.edu/"
 
 
-FIC_PLAINTIFF_COUNTER = 0
-FIC_DOCUMENT_COUNTER = 0
+FIC_PLAINTIFF_COUNTER = 31
+FIC_DOCUMENT_COUNTER = 50
 
-REF_PLAINTIFF_COUNTER = 0
-REF_DOCUMENT_COUNTER = 0
+REF_PLAINTIFF_COUNTER = 17
+REF_DOCUMENT_COUNTER = 99
 
-OTH_DOCUMENT_COUNTER = 0
+OTH_DOCUMENT_COUNTER = 79
 
-COA_DOCUMENT_COUNTER = 0
+COA_DOCUMENT_COUNTER = 19
 
-STATE_STC_DOCUMENT_COUNTER = 0
+STATE_STC_DOCUMENT_COUNTER = 2
 
 SC_DOCUMENT_COUNTER = 0
 
-start_page = 2
+start_page = 25
 
 # key is the column name
 # value is process conditions: [0: html page only has unique this kind of elemnet or multiple get the first one, 1: has many elemnets and get index one;
@@ -92,3 +92,78 @@ section_name = {
     "ref": ref
 }
 table_names = ["fic", "ref", "other", "state", "appeal", "supreme"]
+
+
+def init():
+    # init column name list
+    if FIC_PLAINTIFF_COUNTER != 0 and plaintiff_name_list["fic"] == []:
+        temp = []
+        for i in range(FIC_PLAINTIFF_COUNTER):
+            prefix = "FIC_PLAINTIFF_" + str(i + 1)
+            temp.append(prefix)
+            temp.append(prefix + "_AD")
+            temp.append(prefix + "_PHONE")
+            plaintiff_name_list.update({"fic", temp})
+
+    if REF_PLAINTIFF_COUNTER != 0 and plaintiff_name_list["ref"] == []:
+        temp = []
+        for i in range(REF_PLAINTIFF_COUNTER):
+            prefix = "REF_PLAINTIFF_" + str(i + 1)
+            temp.append(prefix)
+            temp.append(prefix + "_AD")
+            temp.append(prefix + "_PHONE")
+            plaintiff_name_list.update({"ref", temp})
+
+    if FIC_DOCUMENT_COUNTER != 0 and document_list["fic"] == []:
+        temp = []
+        for i in range(FIC_DOCUMENT_COUNTER):
+            prefix = "FIC_DOCUMENT_" + str(i + 1)
+            temp.append(prefix)
+            temp.append(prefix + "_DATE")
+
+        document_list.update({"fic", temp})
+
+    if REF_DOCUMENT_COUNTER != 0 and document_list["ref"] == []:
+        temp = []
+        for i in range(REF_DOCUMENT_COUNTER):
+            prefix = "REF_DOCUMENT_" + str(i + 1)
+            temp.append(prefix)
+            temp.append(prefix + "_DATE")
+
+        document_list.update({"ref", temp})
+
+    if OTH_DOCUMENT_COUNTER != 0 and document_list["other"] == []:
+        temp = []
+        for i in range(OTH_DOCUMENT_COUNTER):
+            prefix = "OTHER_DOCUMENT_" + str(i + 1)
+            temp.append(prefix)
+            temp.append(prefix + "_DATE")
+
+        document_list.update({"other", temp})
+
+    if COA_DOCUMENT_COUNTER != 0 and document_list["appeal"] == []:
+        temp = []
+        for i in range(COA_DOCUMENT_COUNTER):
+            prefix = "APPEAL_DOCUMENT_" + str(i + 1)
+            temp.append(prefix)
+            temp.append(prefix + "_DATE")
+
+        document_list.update({"appeal", temp})
+
+    if STATE_STC_DOCUMENT_COUNTER != 0 and document_list["state"] == []:
+        temp = []
+        for i in range(STATE_STC_DOCUMENT_COUNTER):
+            prefix = "STATE_DOCUMENT_" + str(i + 1)
+            temp.append(prefix)
+            temp.append(prefix + "_DATE")
+
+        document_list.update({"state", temp})
+
+    if SC_DOCUMENT_COUNTER != 0 and document_list["supreme"] == []:
+        temp = []
+        for i in range(SC_DOCUMENT_COUNTER):
+            prefix = "STATE_DOCUMENT_" + str(i + 1)
+            temp.append(prefix)
+            temp.append(prefix + "_DATE")
+
+        document_list.update({"supreme", temp})
