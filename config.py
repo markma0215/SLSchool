@@ -1,24 +1,24 @@
 
-sequence = 480
+sequence = 0
 home_page = "http://securities.stanford.edu/filings.html?sort=cld_fic_filing_dt"
 base = "http://securities.stanford.edu/"
 
 
-FIC_PLAINTIFF_COUNTER = 31
-FIC_DOCUMENT_COUNTER = 50
+FIC_PLAINTIFF_COUNTER = 0
+FIC_DOCUMENT_COUNTER = 0
 
-REF_PLAINTIFF_COUNTER = 17
-REF_DOCUMENT_COUNTER = 99
+REF_PLAINTIFF_COUNTER = 0
+REF_DOCUMENT_COUNTER = 0
 
-OTH_DOCUMENT_COUNTER = 79
+OTH_DOCUMENT_COUNTER = 0
 
-COA_DOCUMENT_COUNTER = 19
+COA_DOCUMENT_COUNTER = 0
 
-STATE_STC_DOCUMENT_COUNTER = 2
+STATE_STC_DOCUMENT_COUNTER = 0
 
 SC_DOCUMENT_COUNTER = 0
 
-start_page = 25
+start_page = 2
 
 # key is the column name
 # value is process conditions: [0: html page only has unique this kind of elemnet or multiple get the first one, 1: has many elemnets and get index one;
