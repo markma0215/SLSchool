@@ -12,8 +12,11 @@ def next_sibling(node, times = 1):
 
     return node.string
 
-def h3(node):
-    return node.h3.string
+def h4(node):
+    if node.h4.string:
+        return node.h4.string.replace("Securities Litigation", "")
+    else:
+        return ""
 
 def contents_string(node):
     text = "\n".join(eachElement.string for eachElement in node.contents if eachElement.string)
@@ -27,16 +30,19 @@ def h4_contents_1(node):
 
 def h4_substring(node):
 
-    if "et al." in node.h4.string:
-        return (node.h4.string.split("et al.")[0] + "et al.")
-    elif "Securities Litigation" in node.h4.string:
-        return node.h4.string.replace("Securities Litigation", "")
-    elif "Litigation" in node.h4.string:
-        return node.h4.string.replace("Litigation", "")
-    elif "v." in node.h4.string:
-        return node.h4.string.split("v.")[0]
-    elif "vs." in node.h4.string:
-        return node.h4.string.split("vs.")[0]
+    if node.h4.string:
+        if "et al." in node.h4.string:
+            return (node.h4.string.split("et al.")[0] + "et al.")
+        elif "Securities Litigation" in node.h4.string:
+            return node.h4.string.replace("Securities Litigation", "")
+        elif "Litigation" in node.h4.string:
+            return node.h4.string.replace("Litigation", "")
+        elif "v." in node.h4.string:
+            return node.h4.string.split("v.")[0]
+        elif "vs." in node.h4.string:
+            return node.h4.string.split("vs.")[0]
+        else:
+            return node.h4.string
     else:
         return ""
 
@@ -74,11 +80,13 @@ def get_plaintiff_name(node, section_name):
         if config.FIC_PLAINTIFF_COUNTER < len(lists):
             config.FIC_PLAINTIFF_COUNTER = len(lists)
             config.plaintiff_name_list.update({"fic": sorted(plaintiff_dict.keys(), key=lambda tag : (int(tag.split("_")[2]), tag))})
+            config.changed = True
 
     elif section_name == "ref":
         if config.REF_PLAINTIFF_COUNTER < len(lists):
             config.REF_PLAINTIFF_COUNTER = len(lists)
             config.plaintiff_name_list.update({"ref": sorted(plaintiff_dict.keys(), key=lambda tag : (int(tag.split("_")[2]), tag))})
+            config.changed = True
 
     else:
         print "section name is %s" % section_name
@@ -107,26 +115,32 @@ def get_documents_list(node, section_name):
         if config.FIC_DOCUMENT_COUNTER < len(lists):
             config.FIC_DOCUMENT_COUNTER = len(lists)
             config.document_list.update({"fic" : keys})
+            config.changed = True
     elif section_name == "ref":
         if config.REF_DOCUMENT_COUNTER < len(lists):
             config.REF_DOCUMENT_COUNTER = len(lists)
             config.document_list.update({"ref" : keys})
+            config.changed = True
     elif section_name == "other":
         if config.OTH_DOCUMENT_COUNTER < len(lists):
             config.OTH_DOCUMENT_COUNTER = len(lists)
             config.document_list.update({"other" : keys})
+            config.changed = True
     elif section_name == "state":
         if config.STATE_STC_DOCUMENT_COUNTER < len(lists):
             config.STATE_STC_DOCUMENT_COUNTER = len(lists)
             config.document_list.update({"state" : keys})
+            config.changed = True
     elif section_name == "appeal":
         if config.COA_DOCUMENT_COUNTER < len(lists):
             config.COA_DOCUMENT_COUNTER = len(lists)
             config.document_list.update({"appeal" : keys})
+            config.changed = True
     elif section_name == "supreme":
         if config.SC_DOCUMENT_COUNTER < len(lists):
             config.SC_DOCUMENT_COUNTER = len(lists)
             config.document_list.update({"supreme" : keys})
+            config.changed = True
     else:
         print "section name is %s" % section_name
 
@@ -135,7 +149,7 @@ def get_documents_list(node, section_name):
 
 mapping = {
     "next_sibling": next_sibling,
-    "h3": h3,
+    "h4": h4,
     "contents_string": contents_string,
     "h4_contents_1": h4_contents_1,
     "content_1": content_1,

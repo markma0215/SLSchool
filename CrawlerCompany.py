@@ -19,7 +19,6 @@ class CrawlCompany():
         if not html_page:
             print "html page is empty, skip this company"
             return
-        config.init()
         cls.data = {"sequence": config.sequence}
         cls.crawl(html_page)
         cls.one_page_data.append(copy.deepcopy(cls.data))
@@ -87,7 +86,10 @@ class CrawlCompany():
                     text = node.string
 
                 if config_info[4]:
-                    text = re.search(config_info[4], text).group(0)
+                    if re.search(config_info[4], text):
+                        text = re.search(config_info[4], text).group(0)
+                    else:
+                        text = ""
 
                 if config_info[5]:
                     text = text.strip('"')
@@ -96,10 +98,7 @@ class CrawlCompany():
 
                 if not text:
                     print each + " : the text is empty"
-                    if each == "REF_PLAINTIFF" or each == "FIC_PLAINTIFF":
-                        sys.exit(1)
-                    else:
-                        time.sleep(10)
+                    time.sleep(5)
 
                 case_info.update({each: text.encode("utf-8")})
 
@@ -127,23 +126,30 @@ class CrawlCompany():
     def write_file(cls):
 
         existed_data = []
+        existed_columns = []
         if os.path.isfile("crawling_data.csv"):
             with open("crawling_data.csv", "rb") as csvfile:
                 reader = csv.DictReader(csvfile)
                 existed_data = [row for row in reader]
+                existed_columns = reader.fieldnames
 
-        column_names = [] + config.summary_name_list + config.company_name_list + \
-            config.fic_name_list + config.plaintiff_name_list["fic"] + config.document_list["fic"] + \
-            config.ref_name_list + config.plaintiff_name_list["ref"] + config.document_list["ref"] + \
-            config.document_list["other"] + config.document_list["state"] + config.document_list["appeal"] + \
-            config.document_list["supreme"]
+        if config.changed:
+            config.changed = False
+            column_names = [] + config.summary_name_list + config.company_name_list + \
+                config.fic_name_list + config.plaintiff_name_list["fic"] + config.document_list["fic"] + \
+                config.ref_name_list + config.plaintiff_name_list["ref"] + config.document_list["ref"] + \
+                config.document_list["other"] + config.document_list["state"] + config.document_list["appeal"] + \
+                config.document_list["supreme"]
 
-
-        existed_data += cls.one_page_data
-        with open("crawling_data.csv", "wb") as csvfile:
-            writer = csv.DictWriter(csvfile, restval="", fieldnames=column_names)
-            writer.writeheader()
-            writer.writerows(existed_data)
+            existed_data += cls.one_page_data
+            with open("crawling_data.csv", "wb") as csvfile:
+                writer = csv.DictWriter(csvfile, restval="", fieldnames=column_names)
+                writer.writeheader()
+                writer.writerows(existed_data)
+        else:
+            with open("crawling_data.csv", "ab") as csvfile:
+                writer = csv.DictWriter(csvfile, restval="", fieldnames=existed_columns)
+                writer.writerows(cls.one_page_data)
 
         cls.data.clear()
         cls.one_page_data = []

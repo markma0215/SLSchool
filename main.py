@@ -55,7 +55,6 @@ def crawlCompanyInfo(url):
     html_page = getHTMLPage(url)
     config.sequence += 1
     CrawlCompany.Crawl(html_page)
-    time.sleep(3)
 
 def crawller(url):
     company_links = getEachCompanyLink(url)
@@ -68,7 +67,72 @@ def crawller(url):
         crawlCompanyInfo(company_links[i])
 
 
+def init():
+    # init column name list
+    if config.FIC_PLAINTIFF_COUNTER != 0 and config.plaintiff_name_list["fic"] == []:
+        temp = []
+        for i in range(config.FIC_PLAINTIFF_COUNTER):
+            prefix = "FIC_PLAINTIFF_" + str(i + 1)
+            temp = temp + [prefix, prefix + "_AD", prefix + "_PHONE"]
+        config.plaintiff_name_list.update({"fic" : temp})
+
+    if config.REF_PLAINTIFF_COUNTER != 0 and config.plaintiff_name_list["ref"] == []:
+        temp = []
+        for i in range(config.REF_PLAINTIFF_COUNTER):
+            prefix = "REF_PLAINTIFF_" + str(i + 1)
+            temp = temp + [prefix, prefix + "_AD", prefix + "_PHONE"]
+        config.plaintiff_name_list.update({"ref" : temp})
+
+    if config.FIC_DOCUMENT_COUNTER != 0 and config.document_list["fic"] == []:
+        temp = []
+        for i in range(config.FIC_DOCUMENT_COUNTER):
+            prefix = "FIC_DOCUMENT_" + str(i + 1)
+            temp += [prefix, prefix + "_DATE"]
+
+        config.document_list.update({"fic" : temp})
+
+    if config.REF_DOCUMENT_COUNTER != 0 and config.document_list["ref"] == []:
+        temp = []
+        for i in range(config.REF_DOCUMENT_COUNTER):
+            prefix = "REF_DOCUMENT_" + str(i + 1)
+            temp += [prefix, prefix + "_DATE"]
+
+        config.document_list.update({"ref" : temp})
+
+    if config.OTH_DOCUMENT_COUNTER != 0 and config.document_list["other"] == []:
+        temp = []
+        for i in range(config.OTH_DOCUMENT_COUNTER):
+            prefix = "OTHER_DOCUMENT_" + str(i + 1)
+            temp += [prefix, prefix + "_DATE"]
+
+        config.document_list.update({"other" : temp})
+
+    if config.COA_DOCUMENT_COUNTER != 0 and config.document_list["appeal"] == []:
+        temp = []
+        for i in range(config.COA_DOCUMENT_COUNTER):
+            prefix = "APPEAL_DOCUMENT_" + str(i + 1)
+            temp += [prefix, prefix + "_DATE"]
+
+        config.document_list.update({"appeal" : temp})
+
+    if config.STATE_STC_DOCUMENT_COUNTER != 0 and config.document_list["state"] == []:
+        temp = []
+        for i in range(config.STATE_STC_DOCUMENT_COUNTER):
+            prefix = "STATE_DOCUMENT_" + str(i + 1)
+            temp += [prefix, prefix + "_DATE"]
+
+        config.document_list.update({"state" : temp})
+
+    if config.SC_DOCUMENT_COUNTER != 0 and config.document_list["supreme"] == []:
+        temp = []
+        for i in range(config.SC_DOCUMENT_COUNTER):
+            prefix = "SUPREME_DOCUMENT_" + str(i + 1)
+            temp += [prefix, prefix + "_DATE"]
+
+        config.document_list.update({"supreme" : temp})
+
 def main():
+    init()
     if config.start_page == 2:
         crawller(config.home_page)
         print "writing file...."

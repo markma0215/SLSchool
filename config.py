@@ -1,24 +1,26 @@
 
-sequence = 0
+sequence = 2420
 home_page = "http://securities.stanford.edu/filings.html?sort=cld_fic_filing_dt"
 base = "http://securities.stanford.edu/"
 
 
-FIC_PLAINTIFF_COUNTER = 0
-FIC_DOCUMENT_COUNTER = 0
+FIC_PLAINTIFF_COUNTER = 34
+FIC_DOCUMENT_COUNTER = 83
 
-REF_PLAINTIFF_COUNTER = 0
-REF_DOCUMENT_COUNTER = 0
+REF_PLAINTIFF_COUNTER = 41
+REF_DOCUMENT_COUNTER = 1423
 
-OTH_DOCUMENT_COUNTER = 0
+OTH_DOCUMENT_COUNTER = 115
 
-COA_DOCUMENT_COUNTER = 0
+COA_DOCUMENT_COUNTER = 26
 
-STATE_STC_DOCUMENT_COUNTER = 0
+STATE_STC_DOCUMENT_COUNTER = 16
 
-SC_DOCUMENT_COUNTER = 0
+SC_DOCUMENT_COUNTER = 20
 
-start_page = 2
+start_page = 122
+
+changed = False
 
 # key is the column name
 # value is process conditions: [0: html page only has unique this kind of elemnet or multiple get the first one, 1: has many elemnets and get index one;
@@ -31,7 +33,7 @@ start_page = 2
 
 summary_name_list = ["sequence", "LITIGATION_NAME", "CASE_STATUS", "SETTLEMENT_DATE", "FILING_DATE", "CASE_SUMMARY"]
 summary = {
-    "LITIGATION_NAME" : [0, "div", "page-header hidden-tablet hidden-desktop", "h3", "", False],
+    "LITIGATION_NAME" : [0, "div", "page-header hidden-phone", "h4", "", False],
     "CASE_STATUS": [0, "span", "icon-check", "next_sibling,1", "", True],
     "SETTLEMENT_DATE": [0, "span", "icon-check", "next_sibling,-1", "(\d\d/){2}\d{4}", True],
     "FILING_DATE": [0, "p", "lead", "", "[\w\s]+,\s\d{4}", False],
@@ -94,76 +96,3 @@ section_name = {
 table_names = ["fic", "ref", "other", "state", "appeal", "supreme"]
 
 
-def init():
-    # init column name list
-    if FIC_PLAINTIFF_COUNTER != 0 and plaintiff_name_list["fic"] == []:
-        temp = []
-        for i in range(FIC_PLAINTIFF_COUNTER):
-            prefix = "FIC_PLAINTIFF_" + str(i + 1)
-            temp.append(prefix)
-            temp.append(prefix + "_AD")
-            temp.append(prefix + "_PHONE")
-            plaintiff_name_list.update({"fic", temp})
-
-    if REF_PLAINTIFF_COUNTER != 0 and plaintiff_name_list["ref"] == []:
-        temp = []
-        for i in range(REF_PLAINTIFF_COUNTER):
-            prefix = "REF_PLAINTIFF_" + str(i + 1)
-            temp.append(prefix)
-            temp.append(prefix + "_AD")
-            temp.append(prefix + "_PHONE")
-            plaintiff_name_list.update({"ref", temp})
-
-    if FIC_DOCUMENT_COUNTER != 0 and document_list["fic"] == []:
-        temp = []
-        for i in range(FIC_DOCUMENT_COUNTER):
-            prefix = "FIC_DOCUMENT_" + str(i + 1)
-            temp.append(prefix)
-            temp.append(prefix + "_DATE")
-
-        document_list.update({"fic", temp})
-
-    if REF_DOCUMENT_COUNTER != 0 and document_list["ref"] == []:
-        temp = []
-        for i in range(REF_DOCUMENT_COUNTER):
-            prefix = "REF_DOCUMENT_" + str(i + 1)
-            temp.append(prefix)
-            temp.append(prefix + "_DATE")
-
-        document_list.update({"ref", temp})
-
-    if OTH_DOCUMENT_COUNTER != 0 and document_list["other"] == []:
-        temp = []
-        for i in range(OTH_DOCUMENT_COUNTER):
-            prefix = "OTHER_DOCUMENT_" + str(i + 1)
-            temp.append(prefix)
-            temp.append(prefix + "_DATE")
-
-        document_list.update({"other", temp})
-
-    if COA_DOCUMENT_COUNTER != 0 and document_list["appeal"] == []:
-        temp = []
-        for i in range(COA_DOCUMENT_COUNTER):
-            prefix = "APPEAL_DOCUMENT_" + str(i + 1)
-            temp.append(prefix)
-            temp.append(prefix + "_DATE")
-
-        document_list.update({"appeal", temp})
-
-    if STATE_STC_DOCUMENT_COUNTER != 0 and document_list["state"] == []:
-        temp = []
-        for i in range(STATE_STC_DOCUMENT_COUNTER):
-            prefix = "STATE_DOCUMENT_" + str(i + 1)
-            temp.append(prefix)
-            temp.append(prefix + "_DATE")
-
-        document_list.update({"state", temp})
-
-    if SC_DOCUMENT_COUNTER != 0 and document_list["supreme"] == []:
-        temp = []
-        for i in range(SC_DOCUMENT_COUNTER):
-            prefix = "STATE_DOCUMENT_" + str(i + 1)
-            temp.append(prefix)
-            temp.append(prefix + "_DATE")
-
-        document_list.update({"supreme", temp})
